@@ -95,6 +95,8 @@ function App() {
   const blurAmountRef = useRef<number>(50);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const showToast = (message: string) => {
+    const isMobile = /iphone|ipad|ipod|android/i.test(navigator.userAgent);
+    if (!isMobile) return;
     setToastMessage(message);
     try {
       (navigator as any)?.vibrate?.(15);
@@ -102,7 +104,7 @@ function App() {
     window.clearTimeout((showToast as any)._t);
     (showToast as any)._t = window.setTimeout(
       () => setToastMessage(null),
-      1800
+      2200
     );
   };
   useEffect(() => {
@@ -788,7 +790,7 @@ function App() {
       </div>
       {toastMessage && (
         <div className="toast" role="status" aria-live="polite">
-          {toastMessage}
+          ✅ {toastMessage}
         </div>
       )}
     </div>
