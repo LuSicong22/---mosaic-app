@@ -563,24 +563,40 @@ function App() {
                   ? "Edited with Mosaic"
                   : "使用马赛克图片编辑器编辑",
             });
-            return; // shared successfully; likely saved to Photos via share sheet
-          } catch (err) {
-            // user may cancel share; fall back to download below
+            return; // shared successfully
+          } catch (err: any) {
+            // If the user cancels the share sheet or it is aborted, do nothing
+            const message = String(err?.message || "").toLowerCase();
+            const name = String(err?.name || "");
+            if (
+              name === "AbortError" ||
+              name === "NotAllowedError" ||
+              message.includes("cancel")
+            ) {
+              return;
+            }
+            // For any unexpected error on mobile, also avoid forcing a download popup
+            return;
           }
         }
+        // Web Share exists but cannot share files; avoid desktop-style download popup on mobile
+        return;
       }
 
-      // Fallback to traditional download (Downloads folder)
+      // Fallback for browsers without Web Share API (e.g., desktop)
       const link = document.createElement("a");
       link.download = "mosaic-image.png";
       link.href = dataURL;
       link.click();
     } catch (e) {
-      // As a last resort, still try to trigger a download link
-      const link = document.createElement("a");
-      link.download = "mosaic-image.png";
-      link.href = dataURL;
-      link.click();
+      // If Web Share is unavailable, try traditional download; otherwise suppress
+      const navAny: any = navigator as any;
+      if (!navAny || typeof navAny.share !== "function") {
+        const link = document.createElement("a");
+        link.download = "mosaic-image.png";
+        link.href = dataURL;
+        link.click();
+      }
     }
   };
 
