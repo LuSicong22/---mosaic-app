@@ -16,10 +16,11 @@ body {
 }
 
 .lang-dropdown {
-  position: fixed;
-  top: 14px;
-  right: 14px;
+  position: relative;
   z-index: 2000;
+  display: block;
+  text-align: right;
+  margin-top: 14px;
 }
 
 .lang-trigger {
@@ -343,11 +344,6 @@ canvas {
 @media (max-width: 768px) {
   .app {
     padding: 15px;
-  }
-
-  /* Avoid overlap between fixed language button and heading */
-  .header {
-    padding-top: 56px;
   }
 
   /* Slightly compact language pill on small screens */
