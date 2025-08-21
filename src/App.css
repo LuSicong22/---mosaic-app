@@ -15,6 +15,26 @@ body {
   color: #333;
 }
 
+.lang-switch {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 2000;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #e1e5e9;
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 700;
+  color: #495057;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.lang-switch:hover {
+  background: #ffffff;
+  border-color: #dee2e6;
+}
+
 .app {
   max-width: 1200px;
   margin: 0 auto;

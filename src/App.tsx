@@ -7,6 +7,66 @@ interface HistoryState {
 }
 
 function App() {
+  type Lang = "en" | "zh";
+  const translations: Record<Lang, Record<string, string>> = {
+    en: {
+      title: "Mosaic Image Editor",
+      subtitle: "Add blur effects to your images",
+      upload_image: "Upload Image",
+      upload_hint: "Upload an image to get started",
+      blur_strength: "Blur strength",
+      undo: "↩️ Undo",
+      redo: "↪️ Redo",
+      clear_effects: "🗑️ Clear Effects",
+      save_image: "💾 Save Image",
+      undo_title: "Undo last action",
+      redo_title: "Redo last undone action",
+      clear_title: "Clear all effects and return to original image",
+      save_title: "Save edited image",
+      how_to_use: "How to use:",
+      step_1: "Upload an image using the button above",
+      step_2: "Adjust blur strength (0–100) to control the effect intensity",
+      step_3: "Click and drag on the image to select a rectangle to blur",
+      step_4: "Use Undo/Redo to adjust your work",
+      step_5: "Save your edited image when finished",
+      switch_label_en: "EN",
+      switch_label_zh: "中文",
+    },
+    zh: {
+      title: "马赛克图片编辑器",
+      subtitle: "为图片添加模糊效果",
+      upload_image: "上传图片",
+      upload_hint: "点击上传图片开始编辑",
+      blur_strength: "模糊强度",
+      undo: "↩️ 撤销",
+      redo: "↪️ 重做",
+      clear_effects: "🗑️ 清除效果",
+      save_image: "💾 保存图片",
+      undo_title: "撤销上一步操作",
+      redo_title: "重做上一步撤销",
+      clear_title: "清除所有效果并恢复原图",
+      save_title: "保存已编辑的图片",
+      how_to_use: "使用说明：",
+      step_1: "点击上方按钮上传一张图片",
+      step_2: "调整模糊强度（0–100）以控制效果强度",
+      step_3: "在图片上点击并拖动选择要模糊的矩形区域",
+      step_4: "使用撤销/重做来调整你的操作",
+      step_5: "完成后保存已编辑的图片",
+      switch_label_en: "EN",
+      switch_label_zh: "中文",
+    },
+  };
+  const [lang, setLang] = useState<Lang>(() => {
+    const saved =
+      typeof window !== "undefined" ? localStorage.getItem("lang") : null;
+    return saved === "en" || saved === "zh" ? (saved as Lang) : "en";
+  });
+  const t = (key: string) => translations[lang][key] || key;
+  useEffect(() => {
+    try {
+      localStorage.setItem("lang", lang);
+    } catch {}
+  }, [lang]);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [history, setHistory] = useState<HistoryState[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -456,9 +516,19 @@ function App() {
 
   return (
     <div className="app">
+      <button
+        className="lang-switch"
+        onClick={() => setLang((prev) => (prev === "en" ? "zh" : "en"))}
+        aria-label={lang === "en" ? "Switch to Chinese" : "切换到英文"}
+        title={lang === "en" ? "Switch to Chinese" : "切换到英文"}
+      >
+        {lang === "en"
+          ? translations["zh"].switch_label_zh
+          : translations["en"].switch_label_en}
+      </button>
       <header className="header">
-        <h1>Mosaic Image Editor</h1>
-        <p>Add blur effects to your images</p>
+        <h1>{t("title")}</h1>
+        <p>{t("subtitle")}</p>
         {/* Install button hidden */}
       </header>
 
@@ -475,18 +545,16 @@ function App() {
             className="btn btn-primary"
             onClick={() => fileInputRef.current?.click()}
           >
-            Upload Image
+            {t("upload_image")}
           </button>
-          {!imageUrl && (
-            <p className="upload-hint">Upload an image to get started</p>
-          )}
+          {!imageUrl && <p className="upload-hint">{t("upload_hint")}</p>}
         </div>
         {imageUrl && (
           <>
             <div className="effect-controls">
               <div className="brush-size">
                 <label htmlFor="blur-strength">
-                  Blur strength: {blurAmount}
+                  {t("blur_strength")}: {blurAmount}
                 </label>
                 <input
                   id="blur-strength"
@@ -505,17 +573,17 @@ function App() {
                   className="btn btn-secondary"
                   onClick={undo}
                   disabled={historyIndex <= 0}
-                  title="Undo last action"
+                  title={t("undo_title")}
                 >
-                  ↩️ Undo
+                  {t("undo")}
                 </button>
                 <button
                   className="btn btn-secondary"
                   onClick={redo}
                   disabled={historyIndex >= history.length - 1}
-                  title="Redo last undone action"
+                  title={t("redo_title")}
                 >
-                  ↪️ Redo
+                  {t("redo")}
                 </button>
               </div>
               <div className="action-spacer" />
@@ -523,16 +591,16 @@ function App() {
                 <button
                   className="btn btn-warning"
                   onClick={clearCanvas}
-                  title="Clear all effects and return to original image"
+                  title={t("clear_title")}
                 >
-                  🗑️ Clear Effects
+                  {t("clear_effects")}
                 </button>
                 <button
                   className="btn btn-success"
                   onClick={saveImage}
-                  title="Save edited image"
+                  title={t("save_title")}
                 >
-                  💾 Save Image
+                  {t("save_image")}
                 </button>
               </div>
             </div>
@@ -564,13 +632,13 @@ function App() {
       </div>
 
       <div className="instructions">
-        <h3>How to use:</h3>
+        <h3>{t("how_to_use")}</h3>
         <ol>
-          <li>Upload an image using the button above</li>
-          <li>Adjust blur strength (0–100) to control the effect intensity</li>
-          <li>Click and drag on the image to select a rectangle to blur</li>
-          <li>Use Undo/Redo to adjust your work</li>
-          <li>Save your edited image when finished</li>
+          <li>{t("step_1")}</li>
+          <li>{t("step_2")}</li>
+          <li>{t("step_3")}</li>
+          <li>{t("step_4")}</li>
+          <li>{t("step_5")}</li>
         </ol>
       </div>
     </div>
