@@ -67,6 +67,27 @@ function App() {
       localStorage.setItem("lang", lang);
     } catch {}
   }, [lang]);
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const langDropdownRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        langDropdownRef.current &&
+        !langDropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsLangOpen(false);
+      }
+    };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsLangOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, []);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [history, setHistory] = useState<HistoryState[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -516,16 +537,44 @@ function App() {
 
   return (
     <div className="app">
-      <button
-        className="lang-switch"
-        onClick={() => setLang((prev) => (prev === "en" ? "zh" : "en"))}
-        aria-label={lang === "en" ? "Switch to Chinese" : "切换到英文"}
-        title={lang === "en" ? "Switch to Chinese" : "切换到英文"}
-      >
-        {lang === "en"
-          ? translations["zh"].switch_label_zh
-          : translations["en"].switch_label_en}
-      </button>
+      <div className="lang-dropdown" ref={langDropdownRef}>
+        <button
+          className="lang-trigger"
+          onClick={() => setIsLangOpen((v) => !v)}
+          aria-haspopup="listbox"
+          aria-expanded={isLangOpen}
+          title={lang === "en" ? "Switch language" : "切换语言"}
+        >
+          <span role="img" aria-label={lang === "en" ? "language" : "语言"}>
+            🌐
+          </span>
+          {lang === "en" ? "EN" : "中文"}
+        </button>
+        <div className={`lang-menu ${isLangOpen ? "open" : ""}`} role="listbox">
+          <button
+            className={`lang-option ${lang === "en" ? "active" : ""}`}
+            role="option"
+            aria-selected={lang === "en"}
+            onClick={() => {
+              setLang("en");
+              setIsLangOpen(false);
+            }}
+          >
+            EN
+          </button>
+          <button
+            className={`lang-option ${lang === "zh" ? "active" : ""}`}
+            role="option"
+            aria-selected={lang === "zh"}
+            onClick={() => {
+              setLang("zh");
+              setIsLangOpen(false);
+            }}
+          >
+            中文
+          </button>
+        </div>
+      </div>
       <header className="header">
         <h1>{t("title")}</h1>
         <p>{t("subtitle")}</p>
