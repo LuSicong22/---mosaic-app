@@ -636,37 +636,41 @@ function App() {
             <div className="action-controls">
               <div className="action-group left">
                 <button
-                  className="btn btn-secondary"
+                  className="btn btn-secondary icon-btn"
                   onClick={undo}
                   disabled={historyIndex <= 0}
+                  aria-label={t("undo_title")}
                   title={t("undo_title")}
                 >
-                  {t("undo")}
+                  ↩️
                 </button>
                 <button
-                  className="btn btn-secondary"
+                  className="btn btn-secondary icon-btn"
                   onClick={redo}
                   disabled={historyIndex >= history.length - 1}
+                  aria-label={t("redo_title")}
                   title={t("redo_title")}
                 >
-                  {t("redo")}
+                  ↪️
                 </button>
               </div>
               <div className="action-spacer" />
               <div className="action-group right">
                 <button
-                  className="btn btn-warning"
+                  className="btn btn-warning icon-btn"
                   onClick={clearCanvas}
+                  aria-label={t("clear_title")}
                   title={t("clear_title")}
                 >
-                  {t("clear_effects")}
+                  🗑️
                 </button>
                 <button
-                  className="btn btn-success"
+                  className="btn btn-success icon-btn"
                   onClick={saveImage}
+                  aria-label={t("save_title")}
                   title={t("save_title")}
                 >
-                  {t("save_image")}
+                  💾
                 </button>
               </div>
             </div>

@@ -345,6 +345,16 @@ canvas {
     padding: 15px;
   }
 
+  /* Avoid overlap between fixed language button and heading */
+  .header {
+    padding-top: 56px;
+  }
+
+  /* Slightly compact language pill on small screens */
+  .lang-trigger {
+    padding: 6px 10px;
+  }
+
   .header h1 {
     font-size: 2rem;
   }
@@ -359,16 +369,33 @@ canvas {
   }
 
   .action-controls {
-    grid-template-columns: 1fr;
+    /* Make four square icon buttons in one row on mobile */
+    grid-template-columns: repeat(4, 1fr);
     gap: 12px;
   }
+  /* Flatten groups so buttons become direct grid children */
   .action-group {
-    grid-auto-flow: row;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    display: contents;
   }
   .action-group.right {
-    grid-template-columns: 1fr;
+    display: contents;
+  }
+  .action-spacer {
+    display: none;
+  }
+
+  /* Icon-only square buttons */
+  .btn.icon-btn {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    text-transform: none;
+    letter-spacing: 0;
   }
 
   .btn {
@@ -396,10 +423,10 @@ canvas {
   }
 
   .action-controls {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(4, 1fr);
   }
   .action-group {
-    grid-template-columns: 1fr;
+    display: contents;
   }
 
   .btn {
@@ -417,8 +444,10 @@ canvas {
     min-height: 44px;
   }
 
+  /* Keep slider track slim on mobile to match desktop look */
   .brush-size input[type="range"] {
-    min-height: 44px;
+    min-height: 0;
+    height: 6px;
   }
 }
 
