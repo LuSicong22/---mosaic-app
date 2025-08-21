@@ -562,7 +562,9 @@ function App() {
       const file = new File([blob], "mosaic-image.png", { type: "image/png" });
 
       const navAny: any = navigator as any;
-      if (navAny && typeof navAny.share === "function") {
+      // Only use Web Share on iOS/Android; desktop should download directly
+      const isMobile = /iphone|ipad|ipod|android/i.test(navigator.userAgent);
+      if (isMobile && navAny && typeof navAny.share === "function") {
         const canShareFiles =
           !navAny.canShare || navAny.canShare({ files: [file] });
         if (canShareFiles) {
@@ -705,7 +707,8 @@ function App() {
                   aria-label={t("undo_title")}
                   title={t("undo_title")}
                 >
-                  ↩️
+                  <span className="btn-icon">↩️</span>
+                  <span className="btn-label">{t("undo")}</span>
                 </button>
                 <button
                   className="btn btn-secondary icon-btn"
@@ -714,7 +717,8 @@ function App() {
                   aria-label={t("redo_title")}
                   title={t("redo_title")}
                 >
-                  ↪️
+                  <span className="btn-icon">↪️</span>
+                  <span className="btn-label">{t("redo")}</span>
                 </button>
               </div>
               <div className="action-spacer" />
@@ -725,7 +729,8 @@ function App() {
                   aria-label={t("clear_title")}
                   title={t("clear_title")}
                 >
-                  🗑️
+                  <span className="btn-icon">🗑️</span>
+                  <span className="btn-label">{t("clear_effects")}</span>
                 </button>
                 <button
                   className="btn btn-success icon-btn"
@@ -733,7 +738,8 @@ function App() {
                   aria-label={t("save_title")}
                   title={t("save_title")}
                 >
-                  💾
+                  <span className="btn-icon">💾</span>
+                  <span className="btn-label">{t("save_image")}</span>
                 </button>
               </div>
             </div>
