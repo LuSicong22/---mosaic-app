@@ -24,8 +24,7 @@ function App() {
   useEffect(() => {
     historyIndexRef.current = historyIndex;
   }, [historyIndex]);
-  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  // Install prompt disabled
 
   const isSelectingRef = useRef(false);
   const [selectionRect, setSelectionRect] = useState<{
@@ -47,32 +46,7 @@ function App() {
     null
   );
 
-  useEffect(() => {
-    // Register service worker
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/sw.js")
-        .then((registration) => {
-          console.log("SW registered: ", registration);
-        })
-        .catch((registrationError) => {
-          console.log("SW registration failed: ", registrationError);
-        });
-    }
-
-    // PWA install prompt
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setShowInstallPrompt(true);
-    });
-
-    // PWA installed
-    window.addEventListener("appinstalled", () => {
-      setShowInstallPrompt(false);
-      setDeferredPrompt(null);
-    });
-  }, []);
+  // PWA install prompt intentionally disabled
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -235,19 +209,7 @@ function App() {
     canvas.addEventListener("touchend", finishSelecting);
   };
 
-  const installPWA = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === "accepted") {
-        console.log("User accepted the install prompt");
-      } else {
-        console.log("User dismissed the install prompt");
-      }
-      setDeferredPrompt(null);
-      setShowInstallPrompt(false);
-    }
-  };
+  // Install flow removed
 
   const saveToHistory = () => {
     if (canvasRef.current) {
@@ -497,11 +459,7 @@ function App() {
       <header className="header">
         <h1>Mosaic Image Editor</h1>
         <p>Add blur effects to your images</p>
-        {showInstallPrompt && (
-          <button className="btn btn-primary install-btn" onClick={installPWA}>
-            📱 Install App
-          </button>
-        )}
+        {/* Install button hidden */}
       </header>
 
       <div className="controls">
