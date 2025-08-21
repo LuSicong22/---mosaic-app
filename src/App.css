@@ -92,6 +92,13 @@ body {
   margin-bottom: 30px;
   color: white;
 }
+.header .header-bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+.header .header-spacer {
+}
 
 .header h1 {
   font-size: 2.5rem;
@@ -375,6 +382,14 @@ canvas {
     padding: 6px 10px;
   }
 
+  /* On mobile keep lang switch fixed-top to avoid overlapping content */
+  .lang-dropdown {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    margin-top: 0;
+  }
+
   .header h1 {
     font-size: 2rem;
   }
@@ -433,6 +448,18 @@ canvas {
   canvas {
     max-width: 100%;
     height: auto;
+  }
+}
+
+/* Desktop: inline language switch with the title */
+@media (min-width: 769px) {
+  .lang-dropdown {
+    position: static;
+    text-align: right;
+    margin-top: 0;
+  }
+  .header .header-bar {
+    margin-bottom: 8px;
   }
 }
 

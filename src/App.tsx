@@ -619,46 +619,52 @@ function App() {
 
   return (
     <div className="app">
-      <div className="lang-dropdown" ref={langDropdownRef}>
-        <button
-          className="lang-trigger"
-          onClick={() => setIsLangOpen((v) => !v)}
-          aria-haspopup="listbox"
-          aria-expanded={isLangOpen}
-          title={lang === "en" ? "Switch language" : "切换语言"}
-        >
-          <span role="img" aria-label={lang === "en" ? "language" : "语言"}>
-            🌐
-          </span>
-          {lang === "en" ? "EN" : "中文"}
-        </button>
-        <div className={`lang-menu ${isLangOpen ? "open" : ""}`} role="listbox">
-          <button
-            className={`lang-option ${lang === "en" ? "active" : ""}`}
-            role="option"
-            aria-selected={lang === "en"}
-            onClick={() => {
-              setLang("en");
-              setIsLangOpen(false);
-            }}
-          >
-            EN
-          </button>
-          <button
-            className={`lang-option ${lang === "zh" ? "active" : ""}`}
-            role="option"
-            aria-selected={lang === "zh"}
-            onClick={() => {
-              setLang("zh");
-              setIsLangOpen(false);
-            }}
-          >
-            中文
-          </button>
-        </div>
-      </div>
       <header className="header">
-        <h1>{t("title")}</h1>
+        <div className="header-bar">
+          <div className="header-spacer" />
+          <h1>{t("title")}</h1>
+          <div className="lang-dropdown" ref={langDropdownRef}>
+            <button
+              className="lang-trigger"
+              onClick={() => setIsLangOpen((v) => !v)}
+              aria-haspopup="listbox"
+              aria-expanded={isLangOpen}
+              title={lang === "en" ? "Switch language" : "切换语言"}
+            >
+              <span role="img" aria-label={lang === "en" ? "language" : "语言"}>
+                🌐
+              </span>
+              {lang === "en" ? "EN" : "中文"}
+            </button>
+            <div
+              className={`lang-menu ${isLangOpen ? "open" : ""}`}
+              role="listbox"
+            >
+              <button
+                className={`lang-option ${lang === "en" ? "active" : ""}`}
+                role="option"
+                aria-selected={lang === "en"}
+                onClick={() => {
+                  setLang("en");
+                  setIsLangOpen(false);
+                }}
+              >
+                EN
+              </button>
+              <button
+                className={`lang-option ${lang === "zh" ? "active" : ""}`}
+                role="option"
+                aria-selected={lang === "zh"}
+                onClick={() => {
+                  setLang("zh");
+                  setIsLangOpen(false);
+                }}
+              >
+                中文
+              </button>
+            </div>
+          </div>
+        </div>
         <p>{t("subtitle")}</p>
         {/* Install button hidden */}
       </header>
