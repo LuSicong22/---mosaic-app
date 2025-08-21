@@ -93,6 +93,18 @@ function App() {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [blurAmount, setBlurAmount] = useState<number>(50);
   const blurAmountRef = useRef<number>(50);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const showToast = (message: string) => {
+    setToastMessage(message);
+    try {
+      (navigator as any)?.vibrate?.(15);
+    } catch {}
+    window.clearTimeout((showToast as any)._t);
+    (showToast as any)._t = window.setTimeout(
+      () => setToastMessage(null),
+      1800
+    );
+  };
   useEffect(() => {
     blurAmountRef.current = blurAmount;
   }, [blurAmount]);
@@ -563,6 +575,7 @@ function App() {
                   ? "Edited with Mosaic"
                   : "使用马赛克图片编辑器编辑",
             });
+            showToast(lang === "en" ? "Saved to Photos" : "已保存到相册");
             return; // shared successfully
           } catch (err: any) {
             // If the user cancels the share sheet or it is aborted, do nothing
@@ -588,6 +601,7 @@ function App() {
       link.download = "mosaic-image.png";
       link.href = dataURL;
       link.click();
+      showToast(lang === "en" ? "Image downloaded" : "已下载图片");
     } catch (e) {
       // If Web Share is unavailable, try traditional download; otherwise suppress
       const navAny: any = navigator as any;
@@ -596,6 +610,7 @@ function App() {
         link.download = "mosaic-image.png";
         link.href = dataURL;
         link.click();
+        showToast(lang === "en" ? "Image downloaded" : "已下载图片");
       }
     }
   };
@@ -759,6 +774,11 @@ function App() {
           <li>{t("step_5")}</li>
         </ol>
       </div>
+      {toastMessage && (
+        <div className="toast" role="status" aria-live="polite">
+          {toastMessage}
+        </div>
+      )}
     </div>
   );
 }

@@ -340,6 +340,21 @@ canvas {
   margin-bottom: 8px;
 }
 
+/* Toast */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  background: rgba(33, 37, 41, 0.9);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  z-index: 3000;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .app {
