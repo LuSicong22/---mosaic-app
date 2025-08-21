@@ -1,12 +1,9 @@
 const CACHE_NAME = "mosaic-editor-v1";
+const BASE_URL = self.registration.scope.replace(/\/$/, "");
 const urlsToCache = [
-  "/",
-  "/index.html",
-  "/manifest.json",
-  "/src/main.tsx",
-  "/src/App.tsx",
-  "/src/App.css",
-  "/src/index.css",
+  `${BASE_URL}/`,
+  `${BASE_URL}/index.html`,
+  `${BASE_URL}/manifest.json`,
 ];
 
 self.addEventListener("install", (event) => {
