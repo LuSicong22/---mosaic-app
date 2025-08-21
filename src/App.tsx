@@ -541,10 +541,42 @@ function App() {
     }
   };
 
-  const saveImage = () => {
-    if (canvasRef.current) {
-      const dataURL = canvasRef.current.toDataURL("image/png");
+  const saveImage = async () => {
+    if (!canvasRef.current) return;
+    const dataURL = canvasRef.current.toDataURL("image/png");
+    try {
+      const response = await fetch(dataURL);
+      const blob = await response.blob();
+      const file = new File([blob], "mosaic-image.png", { type: "image/png" });
 
+      const navAny: any = navigator as any;
+      if (navAny && typeof navAny.share === "function") {
+        const canShareFiles =
+          !navAny.canShare || navAny.canShare({ files: [file] });
+        if (canShareFiles) {
+          try {
+            await navAny.share({
+              files: [file],
+              title: lang === "en" ? "Save to Photos" : "保存到相册",
+              text:
+                lang === "en"
+                  ? "Edited with Mosaic"
+                  : "使用马赛克图片编辑器编辑",
+            });
+            return; // shared successfully; likely saved to Photos via share sheet
+          } catch (err) {
+            // user may cancel share; fall back to download below
+          }
+        }
+      }
+
+      // Fallback to traditional download (Downloads folder)
+      const link = document.createElement("a");
+      link.download = "mosaic-image.png";
+      link.href = dataURL;
+      link.click();
+    } catch (e) {
+      // As a last resort, still try to trigger a download link
       const link = document.createElement("a");
       link.download = "mosaic-image.png";
       link.href = dataURL;
