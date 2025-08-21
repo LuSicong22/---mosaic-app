@@ -165,6 +165,10 @@ function App() {
     };
 
     const startSelecting = (e: MouseEvent | TouchEvent) => {
+      // Prevent page scroll/zoom on touch when starting selection
+      if (typeof TouchEvent !== "undefined" && e instanceof TouchEvent) {
+        e.preventDefault();
+      }
       const { clientX, clientY } = getClientPosition(e);
       const rect = canvas.getBoundingClientRect();
       const containerRect = canvas.parentElement?.getBoundingClientRect();
@@ -187,11 +191,22 @@ function App() {
       // Track moves globally to keep selection even if cursor leaves canvas
       window.addEventListener("mousemove", updateSelection as any);
       window.addEventListener("mouseup", finishSelecting);
+      // Also track touch globally and prevent default scrolling while selecting
+      window.addEventListener(
+        "touchmove",
+        updateSelection as any,
+        { passive: false } as any
+      );
+      window.addEventListener("touchend", finishSelecting);
     };
 
     let moveRafId: number | null = null;
     const updateSelection = (e: MouseEvent | TouchEvent) => {
       if (!isSelectingRef.current || !selectionStartClientRef.current) return;
+      // Prevent page scroll while updating selection on touch devices
+      if (typeof TouchEvent !== "undefined" && e instanceof TouchEvent) {
+        e.preventDefault();
+      }
       if (moveRafId) cancelAnimationFrame(moveRafId);
       moveRafId = requestAnimationFrame(() => {
         const { clientX, clientY } = getClientPosition(e);
@@ -222,6 +237,8 @@ function App() {
       // Stop global tracking
       window.removeEventListener("mousemove", updateSelection as any);
       window.removeEventListener("mouseup", finishSelecting);
+      window.removeEventListener("touchmove", updateSelection as any);
+      window.removeEventListener("touchend", finishSelecting);
       if (
         !isSelectingRef.current ||
         !selectionStartCanvasRef.current ||
@@ -280,12 +297,12 @@ function App() {
     canvas.addEventListener(
       "touchstart",
       startSelecting as any,
-      { passive: true } as any
+      { passive: false } as any
     );
     canvas.addEventListener(
       "touchmove",
       updateSelection as any,
-      { passive: true } as any
+      { passive: false } as any
     );
     canvas.addEventListener("touchend", finishSelecting);
   };

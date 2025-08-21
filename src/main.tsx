@@ -4,8 +4,8 @@ import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
 
-// Register service worker for PWA installability
-if ("serviceWorker" in navigator) {
+// Register service worker in production only
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     const swUrl = `${import.meta.env.BASE_URL}sw.js`;
     navigator.serviceWorker

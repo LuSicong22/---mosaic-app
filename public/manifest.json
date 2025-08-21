@@ -2,8 +2,8 @@
   "name": "Mosaic Image Editor",
   "short_name": "Mosaic Editor",
   "description": "Add mosaic and blur effects to your images easily",
-  "start_url": "/---mosaic-app/",
-  "scope": "/---mosaic-app/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#667eea",
   "theme_color": "#667eea",
@@ -34,10 +34,6 @@
       "purpose": "maskable"
     }
   ],
-  "categories": [
-    "photo",
-    "utilities",
-    "productivity"
-  ],
+  "categories": ["photo", "utilities", "productivity"],
   "lang": "en"
 }

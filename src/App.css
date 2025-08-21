@@ -281,6 +281,7 @@ body {
   max-width: 960px;
   margin-left: auto;
   margin-right: auto;
+  overscroll-behavior: contain;
 }
 
 canvas {
@@ -289,6 +290,10 @@ canvas {
   max-width: 100%;
   height: auto;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  touch-action: none;
+  -ms-touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .selection-rect {
