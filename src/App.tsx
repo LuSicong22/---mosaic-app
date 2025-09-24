@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import "./App.css";
 
 interface HistoryState {
@@ -793,6 +794,7 @@ function App() {
           ✅ {toastMessage}
         </div>
       )}
+      <Analytics />
     </div>
   );
 }

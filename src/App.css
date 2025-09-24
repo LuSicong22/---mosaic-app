@@ -18,8 +18,7 @@ body {
 .lang-dropdown {
   position: relative;
   z-index: 2000;
-  display: block;
-  text-align: right;
+  display: inline-block;
   margin-top: 14px;
 }
 
@@ -43,8 +42,10 @@ body {
 }
 
 .lang-menu {
-  position: absolute;
-  right: 0;
+  position: absolute; /* relative to .lang-dropdown */
+  right: auto;
+  left: 0;
+  transform: none; /* align left edges */
   margin-top: 8px;
   background: #ffffff;
   border: 2px solid #e1e5e9;
@@ -96,6 +97,11 @@ body {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
+}
+.header .header-bar .lang-dropdown {
+  justify-self: end;
+  align-self: center;
+  width: max-content;
 }
 .header .header-spacer {
 }
@@ -395,11 +401,9 @@ canvas {
     padding: 6px 10px;
   }
 
-  /* On mobile keep lang switch fixed-top to avoid overlapping content */
+  /* On mobile keep lang switch inside header; not fixed so dropdown aligns under button */
   .lang-dropdown {
-    position: fixed;
-    top: 14px;
-    right: 14px;
+    position: relative;
     margin-top: 0;
   }
 
@@ -467,8 +471,7 @@ canvas {
 /* Desktop: inline language switch with the title */
 @media (min-width: 769px) {
   .lang-dropdown {
-    position: static;
-    text-align: right;
+    position: static; /* allow dropdown to position relative to button */
     margin-top: 0;
   }
   .header .header-bar {
